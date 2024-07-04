@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TalkBuddy+</title>
+<style>
+  
+  
+  
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #222831;
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  #chat-container {
+    position: relative; /* Necessary for absolute positioning of loading GIF */
+    background-color: #DDDDDD;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    height: 500px; /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #363030;
+  }
+  
+  #chat-history {
+    flex-grow: 1;
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    transition: margin-bottom 0.3s; /* Smooth transition for margin change */
+  }
+
+  /* Custom scrollbar styles */
+  #chat-history::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  #chat-history::-webkit-scrollbar-track {
+    background: #DDDDDD;
+    border-radius: 10px;
+  }
+
+  #chat-history::-webkit-scrollbar-thumb {
+    background-color: #30475E;
+    border-radius: 10px;
+    border: 3px solid #DDDDDD;
+  }
+
+  .user-message, .bot-message {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .user-message {
+    justify-content: flex-end;
+    background-color: #30475E;
+  }
+  
+  .bot-message {
+    justify-content: flex-start;
+    background-color: #F05454;
+  }
+  
+  .message-text {
+    max-width: 80%;
+    color: #ccc;
+  }
+  
+  .message-logo {
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    border-radius: 50%;
+  }
+  
+  form {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #loading-gif {
+    position: absolute;
+    bottom: 55px;
+    left: 20px;
+    display: none; /* Initially hide */
+    width: 70px;
+    height: 70px;
+  }
+  
+  .loading #chat-history {
+    margin-bottom: 60px; /* Add margin when loading */
+  }
+
+  .watermark {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 20px;
+    color: #ccc;
+    opacity: 1;
+    background-color: #F05454;
+    padding: 10px;
+    border-radius: 10px;
+  
+  }
+
+  @media only screen and (max-width: 768px) {
+  #chat-container {
+    width: 90%;
+    max-width: 90%; /* Adjust for smaller screens */
+    height: 80vh;
+  }
+
+  .message-text {
+    max-width: 70%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #chat-container {
+    width: 90%;
+    max-width: 90%; /* Adjust for smaller screens */
+    height: 80vh;
+  }
+
+  .message-text {
+    max-width: 60%; /* Further reduce for very small screens */
+  }
+}
+
+
+
+
+</style>
+</head>
+<body>
+  <div id="chat-container">
+    <h1>Ana</h1>
+    <div id="chat-history"></div>
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Enter your message" autocomplete="off">
+      <button type="submit">Send</button>
+    </form>
+    <img id="loading-gif" src="loader.gif" alt="Loading...">
+  </div>
+  <div class="watermark">DHRUV KAUSHIK</div>
+  <script>
+    const chatHistory = document.getElementById('chat-history');
+    const userInput = document.getElementById('user-input');
+    const form = document.getElementById('chat-form');
+    const loadingGif = document.getElementById('loading-gif');
+    const chatContainer = document.getElementById('chat-container');
+    let loadingTimeout;
+
+    async function sendMessage() {
+      const userMessage = userInput.value;
+      userInput.value = ''; // Clear input field
+
+      showLoading();
+
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userInput: userMessage }),
+        });
+
+        const data = await response.json();
+        const botMessage = data.response;
+
+        // Add chat message to the chat history
+        chatHistory.innerHTML += `
+          <div class="user-message">
+            <div class="message-text">${userMessage}</div>
+            <img class="message-logo" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="User">
+          </div>`;
+        chatHistory.innerHTML += `
+          <div class="bot-message">
+            <img class="message-logo" src="https://th.bing.com/th/id/OIG1.qb2mUjVpVJFh8wn3X23E?w=1024&h=1024&rs=1&pid=ImgDetMain" alt="Bot">
+            <div class="message-text">${botMessage}</div>
+          </div>`;
+
+        // Scroll to the bottom of the chat history
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle errors gracefully, e.g., display an error message to the user
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function showLoading() {
+      chatContainer.classList.add('loading'); // Add loading class
+      loadingTimeout = setTimeout(() => {
+        loadingGif.style.display = 'inline-block';
+      }, 200); // Show loader after 0.2 seconds
+    }
+
+    function hideLoading() {
+      clearTimeout(loadingTimeout);
+      loadingGif.style.display = 'none';
+      chatContainer.classList.remove('loading'); // Remove loading class
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form submission
+      sendMessage();
+    });
+  </script>
+</body>
+</html>
