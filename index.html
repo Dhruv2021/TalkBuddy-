@@ -141,6 +141,37 @@ button {
   border-radius: 3px;
 }
 
+.popup {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 999; /* Ensure it is on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+.popup-content {
+  position: relative;
+  margin: 20% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
 @media only screen and (max-width: 768px) {
   #chat-container {
   width: 90%;
@@ -148,6 +179,10 @@ button {
   padding: 10px;
   margin-bottom: 30px;
   overflow-y: auto; /* Add scrollbar when content overflows */
+}
+
+.popup-content{
+  margin: 80% auto;
 }
 
 
@@ -183,11 +218,22 @@ button {
       margin-bottom: 30px;
       overflow-y: auto; /* Add scrollbar when content overflows */
 }
+
+  .popup-content{
+    margin: 35% auto;
+  }
   }
 
 </style>
 </head>
 <body>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <p>Feedbacks are appreciated. This site is still under development.</p>
+    </div>
+  </div>
+  
   <div id="chat-container">
     <h1>Ana</h1>
     <div id="chat-history"></div>
@@ -263,6 +309,17 @@ button {
       event.preventDefault(); // Prevent form submission
       sendMessage();
     });
+
+
+  window.onload = function() {
+    document.getElementById('popup').style.display = 'block';
+  }
+
+  function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+  }
+
+
   </script>
 </body>
 </html>
