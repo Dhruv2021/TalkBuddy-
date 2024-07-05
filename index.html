@@ -1,170 +1,187 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TalkBuddy+</title>
 <style>
-  
-  
+
+  @import url('https://fonts.googleapis.com/css2?family=Anton+SC&display=swap');
   
   body {
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #222831;
-    margin: 0;
-    overflow: hidden;
-  }
-  
-  #chat-container {
-    position: relative; /* Necessary for absolute positioning of loading GIF */
-    background-color: #DDDDDD;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    height: 500px; /* Fixed height */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #363030;
-  }
-  
-  #chat-history {
-    flex-grow: 1;
-    height: 300px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-    transition: margin-bottom 0.3s; /* Smooth transition for margin change */
-  }
-
-  /* Custom scrollbar styles */
-  #chat-history::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  #chat-history::-webkit-scrollbar-track {
-    background: #DDDDDD;
-    border-radius: 10px;
-  }
-
-  #chat-history::-webkit-scrollbar-thumb {
-    background-color: #30475E;
-    border-radius: 10px;
-    border: 3px solid #DDDDDD;
-  }
-
-  .user-message, .bot-message {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 5px;
-  }
-  
-  .user-message {
-    justify-content: flex-end;
-    background-color: #30475E;
-  }
-  
-  .bot-message {
-    justify-content: flex-start;
-    background-color: #F05454;
-  }
-  
-  .message-text {
-    max-width: 80%;
-    color: #ccc;
-  }
-  
-  .message-logo {
-    width: 40px;
-    height: 40px;
-    margin: 0 10px;
-    border-radius: 50%;
-  }
-  
-  form {
-    display: flex;
-    margin-top: 10px;
-  }
-  
-  input {
-    flex-grow: 1;
-    margin-right: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #loading-gif {
-    position: absolute;
-    bottom: 55px;
-    left: 20px;
-    display: none; /* Initially hide */
-    width: 70px;
-    height: 70px;
-  }
-  
-  .loading #chat-history {
-    margin-bottom: 60px; /* Add margin when loading */
-  }
-
-  .watermark {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 20px;
-    color: #ccc;
-    opacity: 1;
-    background-color: #F05454;
-    padding: 10px;
-    border-radius: 10px;
-  
-  }
-
-  @media only screen and (max-width: 768px) {
-  #chat-container {
-    width: 90%;
-    max-width: 90%; /* Adjust for smaller screens */
-    height: 80vh;
-  }
-
-  .message-text {
-    max-width: 70%;
-  }
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #222831;
+  margin: 0;
+  overflow: hidden;
 }
 
-@media only screen and (max-width: 480px) {
-  #chat-container {
-    width: 90%;
-    max-width: 90%; /* Adjust for smaller screens */
-    height: 80vh;
-  }
+#chat-container {
+  position: relative; /* Necessary for absolute positioning of loading GIF */
+  background-color: #DDDDDD;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 500px; /* Fixed height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .message-text {
-    max-width: 60%; /* Further reduce for very small screens */
-  }
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #363030;
+}
+
+#chat-history {
+  flex-grow: 1;
+  height: 300px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+  transition: margin-bottom 0.3s; /* Smooth transition for margin change */
+}
+
+/* Custom scrollbar styles */
+#chat-history::-webkit-scrollbar {
+  width: 12px;
+}
+
+#chat-history::-webkit-scrollbar-track {
+  background: #DDDDDD;
+  border-radius: 10px;
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+  background-color: #30475E;
+  border-radius: 10px;
+  border: 3px solid #DDDDDD;
+}
+
+.user-message, .bot-message {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.user-message {
+  justify-content: flex-end;
+  background-color: #30475E;
+}
+
+.bot-message {
+  justify-content: flex-start;
+  background-color: #F05454;
+}
+
+.message-text {
+  max-width: 80%;
+  color: #ccc;
+}
+
+.message-logo {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  border-radius: 50%;
+}
+
+form {
+  display: flex;
+  margin-top: 10px;
+}
+
+input {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#loading-gif {
+  position: absolute;
+  bottom: 55px;
+  left: 20px;
+  display: none; /* Initially hide */
+  width: 70px;
+  height: 70px;
+}
+
+.loading #chat-history {
+  margin-bottom: 60px; /* Add margin when loading */
+}
+
+.watermark {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 20px;
+  color: #ccc;
+  opacity: 1;
+  background-color: #F05454;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+@media only screen and (max-width: 768px) {
+  #chat-container {
+  width: 90%;
+  height: 540px; /* Set a fixed height */
+  padding: 10px;
+  margin-bottom: 30px;
+  overflow-y: auto; /* Add scrollbar when content overflows */
 }
 
 
+    .message-text {
+      max-width: 70%;
+    }
 
+    input, button {
+      padding: 8px;
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-family: "Anton SC", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      color: #ccc;
+      opacity: 1;
+      background-color: #F05454;
+      padding: 5px;
+      border-radius: 3px;
+    }
+  }
+
+  @media only screen and (min-width: 768px) and (max-width:1023px ) {
+    #chat-container {
+      width: 90%;
+      height: 90%; /* Set a fixed height */
+      padding: 10px;
+      margin-bottom: 30px;
+      overflow-y: auto; /* Add scrollbar when content overflows */
+}
+  }
 
 </style>
 </head>
